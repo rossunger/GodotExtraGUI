@@ -1,10 +1,10 @@
 extends Button
-
+class_name tabgroup_button, "tab_icon.png"
 export var tabgroup = "" #the name you choose for this tabgroup
 export (NodePath) var tab  #the control that you will be showing when this button is clicked
 export var selected = false 
 
-func _ready():
+func _ready():	
 	tab = get_node(tab)	
 	add_to_group(tabgroup)	
 	
