@@ -1,7 +1,7 @@
 # GodotExtraGUI
 
 # Install
-Add these files to your godot project. This will register a "draggable", "scrollable", "toggleVisible", "tabbutton" objects. Restart editor for icons to update properly
+Add the ExtraGui folder to the root of your godot project. This will register a "draggable", "scrollable", "toggleVisible", "tabbutton" objects. Restart editor for icons to update properly
 
 # USAGE
 Draggable  makes the control resizable, and click to drag it around. 
