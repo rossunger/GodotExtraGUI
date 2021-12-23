@@ -1,5 +1,5 @@
 extends Button
-class_name toggle_visible_button, "res://ExtraGui/eye_icon.png"
+class_name toggle_visible_button, "eye_icon.png"
 export (NodePath) var who
 
 func _ready():

@@ -1,5 +1,5 @@
 extends Button
-class_name tabgroup_button, "res://ExtraGui/tab_icon.png"
+class_name tabgroup_button, "tab_icon.png"
 
 export var tabgroup = "" #the name you choose for this tabgroup
 export (NodePath) var tab  #the control that you will be showing when this button is clicked
