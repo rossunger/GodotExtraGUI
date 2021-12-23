@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ExtraGUI/draggable.gd" type="Script" id=1]
+
+[node name="draggable" type="Node"]
+script = ExtResource( 1 )
+resizeHandle = NodePath("../ResizeHandle")
+moveHandle = NodePath("../Label")
