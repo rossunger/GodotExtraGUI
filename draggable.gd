@@ -16,6 +16,8 @@ export var minHeight = 50
 
 onready var parent = get_parent()
 
+signal undoStateChanged
+
 export (NodePath) var resizeHandle
 export (NodePath) var moveHandle
 
@@ -26,33 +28,26 @@ func _ready():
 	moveHandle = get_node(moveHandle)	
 	moveHandle.connect("gui_input", self, "click")
 
-func click(event):
-	if event.is_action_released("cam_drag"):		
-		moving = false
-	if event.is_action_pressed("cam_drag"):		
-		if canMoveX || canMoveY:
-			moving = true	
-			g.undo.add({"Type": "Move", "Who": parent, "Rect": parent.get_rect()})
-		return
-	
-		if canBeDragged:
-			parent.mouse_filter = Control.MOUSE_FILTER_IGNORE		
-			for c in parent.get_children():
-				if c.name == "dropTarget":
-					continue			
-				if c as Control:
-					c.mouse_filter = Control.MOUSE_FILTER_IGNORE					
-			g.dragTarget = parent	
-			g.emit_signal("dragBegin", parent)
+func click(event:InputEvent):
+	if event as InputEventMouseButton:				
+		if event.button_index == 1 and !event.is_pressed():
+			moving = false
+		if event.button_index == 1 and event.is_pressed():
+			if canMoveX || canMoveY:
+				moving = true					
+				#g.undo.add({"Type": "Move", "Who": parent, "Rect": parent.get_rect()})
+			return		
 		
 func resize(event):
 	if !canResizeX && !canResizeY:		
-		return
-	if event.is_action_pressed("cam_drag"):					
-		resizing = true		
-		g.undo.add({"Type": "Resize", "Who": parent, "Rect": parent.get_rect()})
-	if event.is_action_released("cam_drag"):
-		resizing = false			
+		return	
+	if event as InputEventMouseButton:		
+		if event.button_index == 1 and event.is_pressed():
+			resizing = true	
+			#g.undo.add({"Type": "Resize", "Who": parent, "Rect": parent.get_rect()})
+	if event as InputEventMouseButton:		
+		if event.button_index == 1 and !event.is_pressed():
+			resizing = false			
 		
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -66,4 +61,3 @@ func _input(event):
 				parent.rect_position.x += event.relative.x				
 			if canMoveY:
 				parent.rect_position.y += event.relative.y
-					

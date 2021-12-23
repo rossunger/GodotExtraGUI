@@ -1,15 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://ExtraGUI/toggleVisibleButton.tscn" type="PackedScene" id=1]
-[ext_resource path="res://ExtraGUI/tabButton.tscn" type="PackedScene" id=2]
-[ext_resource path="res://ExtraGUI/scrollable.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ExtraGUI/draggable.tscn" type="PackedScene" id=4]
-[ext_resource path="res://addons/Experiments/PanelWithLabel.gd" type="Script" id=5]
+[ext_resource path="res://ExtraGui/TabgroupButton.gd" type="Script" id=1]
+[ext_resource path="res://ExtraGui/toggleVisible.gd" type="Script" id=2]
+[ext_resource path="res://ExtraGui/draggable.gd" type="Script" id=3]
+[ext_resource path="res://ExtraGui/scrollable.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
-
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 120, 84.5 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -44,7 +40,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="draggable" parent="Panel1/Panel" instance=ExtResource( 4 )]
+[node name="draggable" type="Control" parent="Panel1/Panel"]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 resizeHandle = NodePath("../resizeHandle")
 moveHandle = NodePath("../moveHandle2")
 
@@ -81,7 +81,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="draggable" parent="Panel1/Panel2" instance=ExtResource( 4 )]
+[node name="draggable" type="Control" parent="Panel1/Panel2"]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 resizeHandle = NodePath("../resizeHandle")
 moveHandle = NodePath("../moveHandle2")
 
@@ -108,13 +112,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Area2D" type="Area2D" parent="Panel1/Panel2"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Panel1/Panel2/Area2D"]
-position = Vector2( 126, 106.5 )
-shape = SubResource( 2 )
-
-[node name="scrollable" parent="Panel1" instance=ExtResource( 3 )]
+[node name="scrollable" type="Control" parent="Panel1"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Panel2" type="Panel" parent="."]
 visible = false
@@ -164,47 +166,40 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" parent="MenuPanel/HBoxContainer" instance=ExtResource( 2 )]
+[node name="Button" type="Button" parent="MenuPanel/HBoxContainer"]
 margin_left = 478.0
 margin_right = 498.0
 margin_bottom = 66.0
 text = "1"
+script = ExtResource( 1 )
 tabgroup = "Numbers"
 tab = NodePath("../../../Panel1")
 selected = true
 
-[node name="Button2" parent="MenuPanel/HBoxContainer" instance=ExtResource( 2 )]
+[node name="Button2" type="Button" parent="MenuPanel/HBoxContainer"]
 margin_left = 502.0
 margin_right = 522.0
 margin_bottom = 66.0
 text = "2"
+script = ExtResource( 1 )
 tabgroup = "Numbers"
 tab = NodePath("../../../Panel2")
 
-[node name="Button3" parent="MenuPanel/HBoxContainer" instance=ExtResource( 2 )]
+[node name="Button3" type="Button" parent="MenuPanel/HBoxContainer"]
 margin_left = 526.0
 margin_right = 546.0
 margin_bottom = 66.0
 text = "3"
+script = ExtResource( 1 )
 tabgroup = "Numbers"
 tab = NodePath("../../../Panel3")
 
-[node name="toggleMenu" parent="." instance=ExtResource( 1 )]
-modulate = Color( 1, 1, 1, 1 )
+[node name="toggleMenu" type="Button" parent="."]
 margin_left = 15.0
 margin_top = 12.0
 margin_right = 91.0
 margin_bottom = 52.0
 text = "||| MENU"
-icon = null
+expand_icon = true
+script = ExtResource( 2 )
 who = NodePath("../MenuPanel")
-
-[node name="PanelWithLabel" type="Panel" parent="toggleMenu"]
-margin_left = 83.0
-margin_top = -178.0
-margin_right = 798.0
-margin_bottom = 234.0
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}

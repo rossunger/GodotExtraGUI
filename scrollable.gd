@@ -39,8 +39,7 @@ func doZoom(par, delta):
 			#recursive zoom all the children
 			doZoom(c, delta)			
 	
-func _input(event):	
-	
+func _input(event):		
 	#TO DO: make scrolling only work when mouse is over the object
 	if requireMouseOver:			
 		if !parent.get_rect().has_point(parent.get_parent().get_local_mouse_position()):
