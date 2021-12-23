@@ -1,5 +1,5 @@
 extends Control
-class_name draggable, "move_icon.png"
+class_name draggable, "res://ExtraGui/move_icon.png"
 var resizing = false
 var moving = false
 var renaming = false

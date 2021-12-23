@@ -1,5 +1,5 @@
 extends Control
-class_name scrollable, "move_icon.png"
+class_name scrollable, "res://ExtraGui/move_icon.png"
 
 export var canScrollX = true
 export var canScrollY = true
