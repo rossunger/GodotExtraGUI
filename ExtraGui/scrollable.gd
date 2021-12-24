@@ -32,9 +32,16 @@ func doScroll(delta):
 #This allows you to zoom without affecting the size of labels, etc. 
 func doZoom(par, delta):
 	for c in par.get_children():		
-		if c is Control && c.visible && c.has_node("draggable"):									
-			c.rect_size *= delta * Vector2(canZoomX, canScrollY)
-			c.rect_position *=delta												
+		if c is Control && c.visible && c.has_node("draggable"):
+			if c.name == "ResizeHandle":
+				print("somethingwrong")	
+			if canZoomX:
+				c.rect_size.x *= delta 
+				c.rect_position.x *=delta
+			if canZoomY:
+				c.rect_size.y *= delta 
+				c.rect_position.y *=delta
+				
 						
 			#recursive zoom all the children
 			doZoom(c, delta)			
@@ -62,4 +69,5 @@ func _input(event):
 				doScroll(Vector2(0,scroll_speed))			
 			if event.button_index == BUTTON_WHEEL_DOWN && canScrollY:
 				doScroll(Vector2(0,0-scroll_speed))	
+
 		

@@ -11,3 +11,6 @@ Scrollable  makes the object a scroll container, meaning you can use mousewheel 
 TabButton  is a button that works like a TabContainer. You specify the name of the tabGroup, and which Control (aka tab) this button corresponds to
 
 ToggleVisibleButton is a button that shows/hides a control which you choose
+
+Renameable  makes an object renameable. Specify the label to edit, and it will make a popup to handle the rest
+
