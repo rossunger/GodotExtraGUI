@@ -17,11 +17,13 @@ func _ready():
 	
 	#Init the dialogs
 	dialog = FileDialog.new()
-	dialog.set_anchors_and_margins_preset(Control.PRESET_WIDE)
+	
 	dialogCanvasLayer = CanvasLayer.new()		
 	dialogCanvasLayer.layer =100
-	add_child(dialogCanvasLayer)
+	add_child(dialogCanvasLayer)	
 	dialogCanvasLayer.add_child(dialog)		
+	dialog.set_anchors_and_margins_preset(Control.PRESET_WIDE)
+	dialog.rect_size -=  Vector2(15,30)
 	
 	dialog.popup_exclusive = true
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -49,6 +51,7 @@ func doLoadFrom():
 		resultDialog.disconnect("confirmed", self, "doLoadFrom")
 		
 	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.invalidate()
 	dialog.popup()
 	if !dialog.is_connected("file_selected", self, "doLoad"):
 		dialog.connect("file_selected", self, "doLoad")
@@ -93,11 +96,15 @@ func doLoad(filepath:String = autosaveFilePath):
 		resultDialog.dialog_text = "Some objects didn't have scenes to load. they have been replaced with Panels"		
 		resultDialog.popup()
 	autosaveFile.close() 	 
+	
+	if dialog.is_connected("file_selected", self, "doLoad"):
+		dialog.disconnect("file_selected", self, "doLoad")	
 
 func doSaveAs():
 	if resultDialog.is_connected("confirmed", self, "doSaveAs"):
 		resultDialog.disconnect("confirmed", self, "doSaveAs")
 	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.invalidate()
 	dialog.popup()
 	if !dialog.is_connected("file_selected", self, "doSave"):
 		dialog.connect("file_selected", self, "doSave")
