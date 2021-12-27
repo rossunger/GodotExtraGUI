@@ -4,11 +4,9 @@ class_name remote_hide, "eye_icon.png"
 export (NodePath) var who
 func _ready():
 	who = get_node(who)
-	connect("tree_exiting", self, "doHide")
+	connect("visibility_changed", self, "visibilityChanged")
 	connect("tree_entered", self, "doShow")
 
-func doHide():
-	who.visible = false
-	
-func doShow():
-	who.visible = true
+func visibilityChanged():
+	if who:
+		who.visible = is_visible_in_tree()

@@ -1,152 +1,98 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://ExtraGui/TabgroupButton.gd" type="Script" id=1]
+[ext_resource path="res://ExtraGui/selectionController.gd" type="Script" id=1]
 [ext_resource path="res://ExtraGui/toggleVisible.gd" type="Script" id=2]
-[ext_resource path="res://ExtraGui/draggable.gd" type="Script" id=3]
 [ext_resource path="res://ExtraGui/scrollable.gd" type="Script" id=4]
+[ext_resource path="res://ExtraGui/ExtraGui1.theme" type="Theme" id=5]
+[ext_resource path="res://ExtraGui/tabController.gd" type="Script" id=7]
+[ext_resource path="res://ExtraGui/TabgroupButton.gd" type="Script" id=8]
+[ext_resource path="res://ExtraGui/exampleRecursiveChildToBeAdded.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ExtraGui/undoable.gd" type="Script" id=11]
+[ext_resource path="res://ExtraGui/childAdder.gd" type="Script" id=12]
+[ext_resource path="res://ExtraGui/saveController.gd" type="Script" id=13]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel1" type="Panel" parent="."]
+[node name="Tab1" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 74.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Panel1"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "I am panel 1"
+[node name="Label" type="Label" parent="Tab1"]
+margin_right = 1024.0
+margin_bottom = 600.0
+text = "I am tab 1"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="Panel1"]
-margin_left = 85.0
-margin_top = 97.0
-margin_right = 213.0
-margin_bottom = 232.0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Panel" parent="Tab1" instance=ExtResource( 9 )]
 
-[node name="draggable" type="Control" parent="Panel1/Panel"]
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-resizeHandle = NodePath("../resizeHandle")
-moveHandle = NodePath("../moveHandle2")
+[node name="Panel2" parent="Tab1" instance=ExtResource( 9 )]
+margin_left = 443.0
+margin_top = 114.0
+margin_right = 571.0
+margin_bottom = 249.0
 
-[node name="resizeHandle" type="Panel" parent="Panel1/Panel"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -22.0
-margin_top = -23.0
-margin_right = -2.0
-margin_bottom = -5.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="moveHandle2" type="Panel" parent="Panel1/Panel"]
-anchor_right = 1.0
-margin_left = 3.0
-margin_top = 2.0
-margin_right = -3.0
-margin_bottom = 19.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Panel2" type="Panel" parent="Panel1"]
-margin_left = 462.0
-margin_top = 79.0
-margin_right = 713.0
-margin_bottom = 273.0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="draggable" type="Control" parent="Panel1/Panel2"]
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-resizeHandle = NodePath("../resizeHandle")
-moveHandle = NodePath("../moveHandle2")
-
-[node name="resizeHandle" type="Panel" parent="Panel1/Panel2"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -22.0
-margin_top = -23.0
-margin_right = -2.0
-margin_bottom = -5.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="moveHandle2" type="Panel" parent="Panel1/Panel2"]
-anchor_right = 1.0
-margin_left = 3.0
-margin_top = 2.0
-margin_right = -3.0
-margin_bottom = 19.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="scrollable" type="Control" parent="Panel1"]
+[node name="scrollable" type="Control" parent="Tab1"]
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel2" type="Panel" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 76.0
+[node name="child_adder" type="Control" parent="Tab1"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 12 )
+who = "res://ExtraGui/exampleRecursiveChildToBeAdded.tscn"
+
+[node name="undoable" type="Control" parent="Tab1"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Panel2"]
+[node name="Tab2" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "I am panel 2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Tab2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "I am tab 2"
 align = 1
+valign = 1
 
-[node name="Panel3" type="Panel" parent="."]
-visible = false
+[node name="Tab3" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 77.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Panel3"]
+[node name="Label" type="Label" parent="Tab3"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "I am panel 3"
-align = 2
+text = "I am tab 3"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -154,6 +100,7 @@ __meta__ = {
 [node name="MenuPanel" type="Panel" parent="."]
 anchor_right = 1.0
 margin_bottom = 66.0
+custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -166,33 +113,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="MenuPanel/HBoxContainer"]
-margin_left = 478.0
-margin_right = 498.0
+[node name="Panel1tabbutton" type="Button" parent="MenuPanel/HBoxContainer"]
+margin_left = 472.0
+margin_right = 493.0
 margin_bottom = 66.0
 text = "1"
-script = ExtResource( 1 )
-tabgroup = "Numbers"
-tab = NodePath("../../../Panel1")
+script = ExtResource( 8 )
+tab = NodePath("../../../Tab1")
+closeable = false
 selected = true
 
-[node name="Button2" type="Button" parent="MenuPanel/HBoxContainer"]
-margin_left = 502.0
-margin_right = 522.0
+[node name="Panel2tabbutton" type="Button" parent="MenuPanel/HBoxContainer"]
+margin_left = 497.0
+margin_right = 520.0
 margin_bottom = 66.0
 text = "2"
-script = ExtResource( 1 )
-tabgroup = "Numbers"
-tab = NodePath("../../../Panel2")
+script = ExtResource( 8 )
+tab = NodePath("../../../Tab2")
+closeable = false
 
-[node name="Button3" type="Button" parent="MenuPanel/HBoxContainer"]
-margin_left = 526.0
-margin_right = 546.0
+[node name="Panel3tabbuton" type="Button" parent="MenuPanel/HBoxContainer"]
+margin_left = 524.0
+margin_right = 547.0
 margin_bottom = 66.0
 text = "3"
-script = ExtResource( 1 )
-tabgroup = "Numbers"
-tab = NodePath("../../../Panel3")
+script = ExtResource( 8 )
+tab = NodePath("../../../Tab3")
+closeable = false
+
+[node name="tab_controller" type="Control" parent="MenuPanel/HBoxContainer"]
+margin_left = 551.0
+margin_right = 551.0
+margin_bottom = 66.0
+script = ExtResource( 7 )
+tabGroup = "123tabs"
+tabParent = NodePath("../../..")
 
 [node name="toggleMenu" type="Button" parent="."]
 margin_left = 15.0
@@ -202,4 +157,37 @@ margin_bottom = 52.0
 text = "||| MENU"
 expand_icon = true
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 who = NodePath("../MenuPanel")
+
+[node name="save_controller" type="Node" parent="."]
+script = ExtResource( 13 )
+
+[node name="selection_controller" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Label2" type="Label" parent="."]
+modulate = Color( 1, 1, 1, 0.52549 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -518.0
+margin_top = -305.0
+margin_right = -19.0
+margin_bottom = -20.0
+text = "Ctrl + S : autosave
+Ctrl + shift + S : saveAs
+Ctrl + o : autoload
+Ctrl + shift + o : Load File
+
+Ctrl + Z: undo
+Ctrl + Shift + Z: redo
+
+F: frame children in view"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

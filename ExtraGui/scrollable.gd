@@ -5,7 +5,7 @@ export var canScrollX = true
 export var canScrollY = true
 export var canZoomX = true
 export var canZoomY = true
-export var requireMouseOver = true
+export var onlyDraggables = true 
 
 var x = 0
 var y = 0
@@ -13,53 +13,77 @@ var w = 1
 var h = 1
 export var scroll_speed = 20
 export var zoom_speed = 0.1
-var parent
 
-func _ready():
-	parent = get_parent()		
+var parent #the actual Control that will be scrolled 
+
+func _ready():	
+	parent = get_parent()			
 	if !parent as Control:
 		queue_free()
-
+	
 func doScroll(delta):
 	x += delta.x
 	y += delta.y
 	for c in parent.get_children():
-		if c as Control:
+		if onlyDraggables && !c.has_node("draggable"):
+			continue
+		if c is Control:
 			c.rect_position += delta
 
 
 #Recursively zoom the children, but only if they have a "draggable" node
 #This allows you to zoom without affecting the size of labels, etc. 
-func doZoom(par, delta):
+func doZoom(par, delta):	
 	for c in par.get_children():		
-		if c is Control && c.visible && c.has_node("draggable"):
-			if c.name == "ResizeHandle":
-				print("somethingwrong")	
+		if c is Control && c.visible && c.has_node("draggable"):			
 			if canZoomX:
 				c.rect_size.x *= delta 
 				c.rect_position.x *=delta
 			if canZoomY:
 				c.rect_size.y *= delta 
 				c.rect_position.y *=delta
-				
-						
+										
 			#recursive zoom all the children
 			doZoom(c, delta)			
 	
 func _input(event):		
-	#TO DO: make scrolling only work when mouse is over the object
-	if requireMouseOver:			
-		if !parent.get_rect().has_point(parent.get_parent().get_local_mouse_position()):
-			return	
-
+	if !is_visible_in_tree():
+		return
+		
+	#Frame all draggables so you can see them
+	if Input.is_key_pressed(KEY_F):
+		var topleft
+		var bottomright
+		#Step 1: get the biggest bounding box of all this "scrollables" children combined
+		for c in parent.get_children():
+			if c.has_node("draggable"):
+				if !topleft:
+					topleft = c.rect_global_position
+				if !bottomright:
+					bottomright = c.rect_global_position + c.rect_size
+				topleft.x = min(topleft.x, c.rect_global_position.x)
+				topleft.y = min(topleft.y, c.rect_global_position.y)				
+				bottomright.x = max(bottomright.x, c.rect_global_position.x + c.rect_size.x )
+				bottomright.y = max(bottomright.y, c.rect_global_position.y + c.rect_size.y )			
+		
+		#Step 2: calculate how much we need to zoom
+		var delta = bottomright-topleft			
+		var d = min(parent.rect_size.x/delta.x, parent.rect_size.y/ delta.y)
+		
+		#Step 3: Zoom and Pan
+		doScroll(-topleft + Vector2(1,1))		
+		doZoom(parent, d)		
+		
 	#mousehweel = scroll
 	#Control + mousewheel = zoom		
 	if event is InputEventMouseButton:		
 		if Input.is_key_pressed(KEY_CONTROL):
-			if event.button_index == BUTTON_WHEEL_UP && canZoomX:
-				doZoom(parent, 1 + zoom_speed)
-			if event.button_index == BUTTON_WHEEL_DOWN && canZoomX:
+			if event.button_index == BUTTON_WHEEL_UP && canZoomX:							
+				doZoom(parent, 1 + zoom_speed)				
+				doScroll( ( -event.position) / scroll_speed )
+			if event.button_index == BUTTON_WHEEL_DOWN && canZoomX:				
 				doZoom(parent, 1 - zoom_speed)
+				doScroll( ( event.position) / scroll_speed )
 		else:
 			if event.button_index == BUTTON_WHEEL_RIGHT && canScrollX:
 				doScroll(Vector2(0-scroll_speed,0))			
