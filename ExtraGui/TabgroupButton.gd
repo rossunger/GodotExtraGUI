@@ -2,7 +2,7 @@ extends Button
 class_name TabgroupButton, "tab_icon.png"
 
 var tabGroup: String
-var tabController: TabController
+var tabController
 export (NodePath) var tab  #the control that you will be showing when this button is clicked
 export var closeable = true
 export var selected = false #only one tab should be selected at a time
