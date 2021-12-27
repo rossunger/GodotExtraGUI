@@ -1,6 +1,8 @@
 extends Control
 class_name Selectable, "select_icon.png"
 
+# This component makes it's parent selectable 
+
 onready var parent = get_parent()
 var selected = false
 
@@ -10,6 +12,10 @@ func _ready():
 	parent.connect("resized", self, "resize")
 	resize()
 
+#resize this component to be the size of it's parent
+func resize():	
+	rect_size = parent.rect_size
+	
 func select_one(who):
 	if parent == who:
 		doSelect()
@@ -19,7 +25,7 @@ func select_one(who):
 func drag_select(box: Rect2):	
 	if !is_visible_in_tree():
 		return
-	var r = Rect2(parent.rect_global_position, parent.rect_size)
+	var r = Rect2(parent.rect_global_position, parent.rect_size)	
 	if box.intersects(r) && !r.encloses(box) && !is_grandparent_selected():				
 		doSelect()
 
@@ -53,6 +59,3 @@ func _draw():
 		sb.draw_center = false
 		draw_style_box(sb, Rect2(rect_position, rect_size))
 		
-
-func resize():	
-	rect_size = parent.rect_size

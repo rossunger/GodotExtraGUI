@@ -1,6 +1,8 @@
 extends Control
 class_name Scrollable, "move_icon.png"
 
+# This component makes the parent a scrollbox, allowing you to scroll it's children, and zoom in and out
+
 export var canScrollX = true
 export var canScrollY = true
 export var canZoomX = true
@@ -50,7 +52,7 @@ func _input(event):
 	if !is_visible_in_tree():
 		return
 		
-	#Frame all draggables so you can see them
+	#Frame all draggables so you can see them (i.e. zoom out/in and scroll as needed so that the bounding box of all the draggales combines is equal to the screen size)
 	if Input.is_key_pressed(KEY_F):
 		var topleft
 		var bottomright

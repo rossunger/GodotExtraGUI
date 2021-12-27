@@ -1,24 +1,22 @@
 extends Button
 class_name TabgroupButton, "tab_icon.png"
 
-var tabGroup
-var tabController
+var tabGroup: String
+var tabController: TabController
 export (NodePath) var tab  #the control that you will be showing when this button is clicked
-var tab_parent
 export var closeable = true
-export var selected = false 
-var closeButton
+export var selected = false #only one tab should be selected at a time
+var closeButton: Button
 	
 func _ready():	
 	tab = get_node(tab)			
-	connect("pressed", self, "_on_Button_pressed")
-	tab_parent = tab.get_parent()	
+	connect("pressed", self, "_on_Button_pressed")	
 	
 	#Init the tabggroup... hide the unselected ones
 	if selected:
 		changeTab(tab.name)
 	else:
-		changeTab("")
+		changeTab("") #if none are selected, just show the first one
 
 	if closeable:
 		closeButton = Button.new()
@@ -36,6 +34,7 @@ func _ready():
 		closeButton.connect("pressed", tabController, "closeTab", [self])
 		
 
+#this will be called automatically...do not call it yourself! instead use get_tree().call_group. See TabController.gd for example
 func closeTab():
 	tab.queue_free()	
 	queue_free()	
@@ -45,7 +44,8 @@ func showCloseButton(show):
 
 func _on_Button_pressed():
 	get_tree().call_group(tabGroup, "changeTab", tab.name)
-	
+
+#called automatically via call_group (see above). Each tab hides or shows themselves
 func changeTab(tabname):
 	if tab.name == tabname:
 		tab.visible = true 		

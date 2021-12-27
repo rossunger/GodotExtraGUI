@@ -34,6 +34,7 @@ func connect_signals():
 	connect("tree_exited", self, "onExitingTree" )
 
 func onExitingTree():	
+	# For the undo system, when you remove a node from the tree, it has to go somewhere, so we temporarily attach it to the ExtraGuiSingleton
 	if !removed:
 		egs.add_child(parent)
 		removed =true
@@ -58,7 +59,8 @@ func addUndo(what):
 	egs.addUndo(what.time)
 	redoList.clear()	
 
-func doUndo(time):		
+func doUndo(time):	
+	# Every undoable action is timestamped
 	if !is_visible_in_tree() or undoList.size() == 0 or abs(undoList.back().time - time) >16:
 		return
 		 

@@ -1,5 +1,7 @@
 extends Node
 
+# This is a singleton that manages the Input map and overseas the Undo system
+
 var selectionController
 var saveController
 

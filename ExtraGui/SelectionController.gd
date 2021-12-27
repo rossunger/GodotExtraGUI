@@ -1,6 +1,8 @@
 extends Node
 class_name SelectionController, "select_icon.png"
 
+# SelectionController singleton. instance a selectBox when you click and drag
+
 signal resizing
 signal moving
 
@@ -8,7 +10,7 @@ var parent
 var selectBox
 export var color = Color.cornflower
 var interrupted = false
-onready var timer = Timer.new()
+onready var timer = Timer.new() #used for interrupting the select box
 var startPosition
 
 func _ready():
@@ -21,14 +23,7 @@ func _ready():
 		egs.selectionController = self
 	else:
 		queue_free()
-
-func startResizing():
-	pass
-
-func endResizing():
-	pass
 		
-
 func _input(event):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
 		timer.start(0.01)			

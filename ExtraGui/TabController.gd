@@ -1,17 +1,17 @@
 extends Control
 class_name TabController, "tab_icon.png"
 
-var parent 
+#This class manages a set of of TabgroupButtons, which are it's siblings in the tree
+
+var parent #the parent of this controller and all the tabgroupButtons
 var tabs: Dictionary = {}
-var currentTab
-export var tabGroup = "tabgroup1"
-export (NodePath) var tabParent
+export var tabGroup = "tabgroup1" 
+export (NodePath) var tabParent #the parent of the actual tab
 
 func _ready():
 	parent = get_parent()		
-	tabParent = get_node(tabParent)	
-	var c = parent.get_children()	
-	for tabButton in c:				
+	tabParent = get_node(tabParent)			
+	for tabButton in parent.get_children():				
 		if tabButton is TabgroupButton:
 			tabs[tabButton.name] = tabButton.tab
 			tabButton.tabGroup = "tabgroup_" + tabGroup
@@ -32,6 +32,7 @@ func openTab(tabGroupName, sceneToOpen = null, tabName = tabs.values()[0].name )
 		tab.name = tabName
 		tabParent.add_child(tab)
 		
+		#create a TabgroupButton for this newly opened tab
 		var tabButton = TabgroupButton.new()
 		tabButton.name = tabName
 		tabButton.text = tabName
@@ -40,10 +41,10 @@ func openTab(tabGroupName, sceneToOpen = null, tabName = tabs.values()[0].name )
 		tabButton.tabController = self
 		tabButton.add_to_group("tabgroup_" + tabGroup)		
 		parent.add_child(tabButton)			
-						
-		
+								
 		tabs[tabName] = tab
 		
+	#change tabs to this new tab
 	get_tree().call_group("tabgroup_" + tabGroup, "changeTab", tabs[tabName].name)	
 	
 func closeTab(tabButton):

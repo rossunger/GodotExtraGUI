@@ -1,6 +1,8 @@
 extends Node
 class_name Saveable, "save_icon.png"
 
+#this control makes it's parent's data saveable. Override the getDataToSave function to save other data... you'll have to modify save controller too to tell it what to do with this data
+
 var parent
 func _ready():
 	parent = get_parent()

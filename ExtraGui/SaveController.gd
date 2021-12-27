@@ -1,6 +1,8 @@
 extends Node
 class_name SaveController, "save_icon.png"
 
+# SaveController is a singleton that handles saving and loading
+
 var saveFilePath
 var saveFile = File.new()
 var dialog: FileDialog
@@ -10,12 +12,14 @@ var autosaveFile = File.new()
 var dialogCanvasLayer: CanvasLayer
 
 func _ready():
+	#register this singleton in the ExtraGui singleton
 	if !egs.saveController:
 		egs.saveController = self
 	else:
 		queue_free()
 	
-	#Init the dialogs
+	#Init the dialogs. Put them on a canavs layer so they float about all the other GUI
+	#resultDialog is an alert expresses how the save/open went, and if there are any error. 
 	dialog = FileDialog.new()
 	
 	dialogCanvasLayer = CanvasLayer.new()		
@@ -49,9 +53,9 @@ func _input(event):
 func doLoadFrom():
 	if resultDialog.is_connected("confirmed", self, "doLoadFrom"):
 		resultDialog.disconnect("confirmed", self, "doLoadFrom")
-		
+	
 	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.invalidate()
+	dialog.invalidate() #refresh the file system
 	dialog.popup()
 	if !dialog.is_connected("file_selected", self, "doLoad"):
 		dialog.connect("file_selected", self, "doLoad")
@@ -76,6 +80,7 @@ func doLoad(filepath:String = autosaveFilePath):
 	var errors = false
 	for d in data:
 		if !is_instance_valid( get_node_or_null( d.path_to_parent )):			
+			#This should never happen, because we sort the nodes by heirarchy first
 			print("Error! trying to load a node who's parent doesn't exist yet")	
 				
 		var scene = load(d.scene)
@@ -92,6 +97,8 @@ func doLoad(filepath:String = autosaveFilePath):
 		child.rect_position = str2var("Vector2" + d.rect_position)
 		child.rect_size = str2var("Vector2" + d.rect_size)
 	
+		#If you have other data to load, this is where you should do that
+
 	if errors:
 		resultDialog.dialog_text = "Some objects didn't have scenes to load. they have been replaced with Panels"		
 		resultDialog.popup()
@@ -128,7 +135,7 @@ func doSave(filepath:String = autosaveFilePath):
 			return
 		filepath += ".json"
 	saveFilePath = filepath		
-	saveFile.open(saveFilePath, File.READ)	
+	
 	var saveData: Array
 	var sortedSaveables = get_tree().get_nodes_in_group("saveable")
 	sortedSaveables.sort_custom(self, "SortByHeirarchy")

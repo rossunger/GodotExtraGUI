@@ -1,14 +1,17 @@
 extends Control
 class_name SelectBox,"select_icon.png"
 
+# This class is instanced automatically by SelectionController as eeded. DO NOT USE MANUALLY
+
 var start
 var end
-var color =  Color.cornflower
+var color =  Color.cornflower #the color of the selectBox outline
 func _input(event):
 	if event is InputEventMouseMotion:
 		end += event.relative
 		update()
-	#On mouse up
+	
+	#On mouse up do the selection, deselcting-all first if neededl, and then delete this selectbox
 	if event is InputEventMouseButton && event.button_index==1 && !event.pressed:		
 		if !Input.is_key_pressed(KEY_SHIFT):
 			if !egs.selectionController.interrupted:
