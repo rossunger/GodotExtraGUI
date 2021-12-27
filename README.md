@@ -1,5 +1,8 @@
 # GodotExtraGUI
 
+# Video demo
+https://www.youtube.com/watch?v=Lm_o7H0sF00
+
 # Install
 Add the ExtraGui folder to the root of your godot project. 
 Enable the ExtraGui plugin in your project settings OR just add "ExtraGuiSingleton" as "egs" to your autoloads. Restart editor for icons to update properly  
