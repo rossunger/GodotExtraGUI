@@ -162,8 +162,6 @@ func grow_parent_as_needed():
 		par.rect_size = newRect.size	
 		
 func validate_size():
-	print(parent.rect_size.x, " vs ", minWidth )
-	print(parent.rect_size.y, "vs",  minHeight )
 	if parent.rect_size.x < minWidth or parent.rect_size.y < minHeight:
 		becomeSmall()
 	else:
