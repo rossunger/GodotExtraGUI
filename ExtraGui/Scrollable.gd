@@ -53,7 +53,7 @@ func _input(event):
 		return
 		
 	#Frame all draggables so you can see them (i.e. zoom out/in and scroll as needed so that the bounding box of all the draggales combines is equal to the screen size)
-	if Input.is_key_pressed(KEY_F):
+	if Input.is_key_pressed(KEY_F) && Input.is_key_pressed(KEY_ALT):
 		var topleft
 		var bottomright
 		#Step 1: get the biggest bounding box of all this "scrollables" children combined

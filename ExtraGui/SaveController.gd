@@ -60,7 +60,7 @@ func doLoadFrom():
 	if !dialog.is_connected("file_selected", self, "doLoad"):
 		dialog.connect("file_selected", self, "doLoad")
 	
-func doLoad(filepath:String = autosaveFilePath):
+func doLoad(filepath:String = autosaveFilePath):	
 	if !filepath.ends_with(".json"):
 		resultDialog.dialog_text = "Please select a .json save file"
 		resultDialog.popup()
@@ -97,7 +97,10 @@ func doLoad(filepath:String = autosaveFilePath):
 		child.rect_position = str2var("Vector2" + d.rect_position)
 		child.rect_size = str2var("Vector2" + d.rect_size)
 	
-		#If you have other data to load, this is where you should do that
+		#If you have other data to load, this is where you should do that		
+		var saveable = child.get_node("Saveable")
+		if saveable.has_method("processLoadData"):
+			saveable.processLoadData(d)
 
 	if errors:
 		resultDialog.dialog_text = "Some objects didn't have scenes to load. they have been replaced with Panels"		

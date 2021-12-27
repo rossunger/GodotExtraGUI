@@ -1,12 +1,20 @@
 extends Node
 class_name Saveable, "save_icon.png"
 
-#this control makes it's parent's data saveable. Override the getDataToSave function to save other data... you'll have to modify save controller too to tell it what to do with this data
+#this control makes it's parent's data saveable. 
+#To save more data, add a child node that has 
+# getDataToSave and processLoadData functions
+
 
 var parent
 func _ready():
 	parent = get_parent()
 	add_to_group("saveable")
+
+func processLoadData(data:Dictionary):
+	for c in get_children():
+		if c.has_method("processLoadData"):
+			c.processLoadData(data)
 	
 func getDataToSave() -> Dictionary:
 	var r: Dictionary = {}
@@ -15,6 +23,9 @@ func getDataToSave() -> Dictionary:
 	r.rect_size = parent.rect_size
 	r.path_to_parent = parent.get_parent().get_path()
 	r.scene = parent.filename
+	for c in get_children():
+		if c.has_method("getDataToSave"):
+			g.merge(r, c.getDataToSave())
 	return r
 
 
