@@ -1,7 +1,8 @@
 # GodotExtraGUI
 
 # Install
-Add the ExtraGui folder to the root of your godot project. Add "ExtraGuiSingleton" as "egs" to your autoloads. Restart editor for icons to update properly  
+Add the ExtraGui folder to the root of your godot project. 
+Enable the ExtraGui plugin in your project settings OR just add "ExtraGuiSingleton" as "egs" to your autoloads. Restart editor for icons to update properly  
 
 # USAGE
 Draggable  makes the control resizable, and click to drag it around. 
