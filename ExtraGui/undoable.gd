@@ -1,5 +1,5 @@
 extends Control
-class_name undoable, "undo_icon.png"
+class_name Undoable, "undo_icon.png"
 
 export var resize = true
 export var move = true
@@ -22,11 +22,11 @@ func _ready():
 	add_to_group("undoable")
 	
 func connect_signals():
-	if parent.has_node("draggable") && (move or resize):
+	if parent.has_node("Draggable") && (move or resize):
 		parent.connect("startMoveResize", self, "moved_or_resized")
-	if rename && parent.has_node("renameable"):
+	if rename && parent.has_node("Renameable"):
 		parent.connect("doneRenaming", self, "doneRenaming")
-	if parent.has_node("child_adder"):
+	if parent.has_node("ChildAdder"):
 		parent.connect("created", self, "created")		
 	if parent.has_signal("doRemove"):
 		parent.connect("doRemove", self, "doRemove")
@@ -44,9 +44,8 @@ func onExitingTree():
 func doneRenaming(label, oldName):	
 	addUndo({"Type": "Rename", "Who": parent, "Label": label, "OldName": oldName, "time": OS.get_ticks_msec()})
 
-func moved_or_resized(oldRect):	
-	var t = OS.get_ticks_msec()
-	addUndo({"Type": "MoveResize", "Who": parent,"OldRect": oldRect, "time": t})	
+func moved_or_resized(oldRect):		
+	addUndo({"Type": "MoveResize", "Who": parent,"OldRect": oldRect, "time": OS.get_ticks_msec()})	
 
 func created(child):	
 	addUndo({"Type": "Create", "Parent": parent,"Child": child, "time": OS.get_ticks_msec()})
@@ -103,6 +102,7 @@ func doRedo(time):
 		undoList.append(u)
 		
 	elif u.Type == "Create":
+		u.Child.get_parent().remove_child(u.Child)
 		u.Parent.add_child(u.Child)
 		undoList.append(u)
 		

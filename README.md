@@ -20,11 +20,11 @@ Selectable   makes an object selectable
 
 Select_Box_Controller  creates a select box when you click
 
-Select_box      automatically created, draw a select box as you drag the mouse, and adds all "selectables" to a group called "selected" when you release the mouse button
+SelectBox      automatically created, draw a select box as you drag the mouse, and adds all "selectables" to a group called "selected" when you release the mouse button
 
-Child_adder    lets you instance scenes on the parent using ctrl+click 
+ChildAdder    lets you instance scenes on the parent using ctrl+click 
 
-Remote_hide     set "WHO" to the control that you want to hide remotely. when this control's visibility is changed, it will hide/hide the WHO that you've selected.
+RemoteHide     set "WHO" to the control that you want to hide remotely. when this control's visibility is changed, it will hide/hide the WHO that you've selected.
 
 Saveable        add this to any control who's data you want to save. override the "getDataToSave" function to change what data it sends to the saveController. Make sure the object to be saved is it's own packed scene (.tscn)
 
@@ -33,3 +33,6 @@ SaveController      A singleton for managing Saving and loading. Saves data to .
 ExtraGuiSingleton       add this to your Autoloads. This stores a reference to all the singletons, and manages the Undo system
 
 Undoable    add this as a sibling to any draggables which you would like to work with the undo system. Works with moving, resizing, renaming, creating/deleting, 
+
+
+NOTE: Do note rename the nodes "Draggable, Scrollable, Renameable, Selectable, ChildAdder, Saveable, Undoable

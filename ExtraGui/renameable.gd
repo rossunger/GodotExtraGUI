@@ -1,5 +1,5 @@
 extends Node
-class_name renameable, "edit_icon.png"
+class_name Renameable, "edit_icon.png"
 
 export (NodePath) var who
 var popupScene = preload("renamePopup.tscn")

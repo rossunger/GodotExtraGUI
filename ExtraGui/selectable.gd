@@ -1,5 +1,5 @@
 extends Control
-class_name selectable, "select_icon.png"
+class_name Selectable, "select_icon.png"
 
 onready var parent = get_parent()
 var selected = false

@@ -1,5 +1,5 @@
 extends Control
-class_name tab_controller, "tab_icon.png"
+class_name TabController, "tab_icon.png"
 
 var parent 
 var tabs: Dictionary = {}
@@ -9,10 +9,10 @@ export (NodePath) var tabParent
 
 func _ready():
 	parent = get_parent()		
-	tabParent = get_node(tabParent)
+	tabParent = get_node(tabParent)	
 	var c = parent.get_children()	
 	for tabButton in c:				
-		if tabButton is tabgroup_button:
+		if tabButton is TabgroupButton:
 			tabs[tabButton.name] = tabButton.tab
 			tabButton.tabGroup = "tabgroup_" + tabGroup
 			tabButton.add_to_group(tabButton.tabGroup)
@@ -32,7 +32,7 @@ func openTab(tabGroupName, sceneToOpen = null, tabName = tabs.values()[0].name )
 		tab.name = tabName
 		tabParent.add_child(tab)
 		
-		var tabButton = tabgroup_button.new()
+		var tabButton = TabgroupButton.new()
 		tabButton.name = tabName
 		tabButton.text = tabName
 		tabButton.tab = tab.get_path()

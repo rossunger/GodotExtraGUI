@@ -1,5 +1,5 @@
 extends Node
-class_name save_controller, "save_icon.png"
+class_name SaveController, "save_icon.png"
 
 var saveFilePath
 var saveFile = File.new()
@@ -47,6 +47,8 @@ func _input(event):
 func doLoadFrom():
 	if resultDialog.is_connected("confirmed", self, "doLoadFrom"):
 		resultDialog.disconnect("confirmed", self, "doLoadFrom")
+		
+	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.popup()
 	if !dialog.is_connected("file_selected", self, "doLoad"):
 		dialog.connect("file_selected", self, "doLoad")
@@ -95,6 +97,7 @@ func doLoad(filepath:String = autosaveFilePath):
 func doSaveAs():
 	if resultDialog.is_connected("confirmed", self, "doSaveAs"):
 		resultDialog.disconnect("confirmed", self, "doSaveAs")
+	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.popup()
 	if !dialog.is_connected("file_selected", self, "doSave"):
 		dialog.connect("file_selected", self, "doSave")

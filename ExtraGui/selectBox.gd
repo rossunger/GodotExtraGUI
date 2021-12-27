@@ -1,5 +1,5 @@
 extends Control
-class_name select_box,"select_icon.png"
+class_name SelectBox,"select_icon.png"
 
 var start
 var end
@@ -14,7 +14,7 @@ func _input(event):
 			if !egs.selectionController.interrupted:
 				if get_tree().get_nodes_in_group("selected").size() > 0:		
 					get_tree().call_group("selectable", "deselect")					
-		get_tree().call_group("selectable", "drag_select", make_rect())		
+			get_tree().call_group("selectable", "drag_select", make_rect())		
 		queue_free()
 		
 		

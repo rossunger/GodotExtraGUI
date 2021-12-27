@@ -1,5 +1,5 @@
 extends Button
-class_name tabgroup_button, "tab_icon.png"
+class_name TabgroupButton, "tab_icon.png"
 
 var tabGroup
 var tabController

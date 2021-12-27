@@ -1,5 +1,5 @@
 extends Node
-class_name selection_controller, "select_icon.png"
+class_name SelectionController, "select_icon.png"
 
 signal resizing
 signal moving
@@ -39,7 +39,7 @@ func _input(event):
 		
 func startSelection():
 	timer.stop()
-	selectBox = select_box.new()
+	selectBox = SelectBox.new()
 	selectBox.color = color
 	selectBox.start = startPosition
 	selectBox.end = startPosition

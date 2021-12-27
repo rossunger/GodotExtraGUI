@@ -1,5 +1,5 @@
 extends Control
-class_name draggable, "move_icon.png"
+class_name Draggable, "move_icon.png"
 
 var resizing = false
 var moving = false
@@ -13,21 +13,30 @@ export var canReceiveDrop = true
 export var canBeDragged = true
 export var canClose = true
 
-export var minWidth = 160
-export var minHeight = 50
+export var minWidth = 60
+export var minHeight = 60
 
 export (NodePath) var resizeHandle
 export (NodePath) var moveHandle
 
-onready var parent = get_parent()
+var parent
+var closeButton:Button
+
+var small = false
 
 func _ready():			
+	parent = get_parent()
+	
 	resizeHandle = get_node(resizeHandle)	
 	if resizeHandle:
 		resizeHandle.connect("gui_input", self, "resize")		
 	moveHandle = get_node(moveHandle)	
 	moveHandle.mouse_filter = MOUSE_FILTER_STOP
-	moveHandle.connect("gui_input", self, "click")	
+	moveHandle.connect("gui_input", self, "click")		
+	moveHandle.connect("mouse_entered", self, "showCloseButton")
+	moveHandle.connect("mouse_exited", self, "showCloseButton")
+		
+	parent.connect("resized", self, "validate_size")
 	
 	add_to_group("draggable")
 	parent.add_user_signal("startMoveResize")
@@ -36,20 +45,30 @@ func _ready():
 	parent.connect("doRemove", self, "doRemove")	
 	grow_parent_as_needed()	
 	
-	if canClose:
-		var c = Button.new()
-		c.set_anchors_and_margins_preset(Control.PRESET_TOP_RIGHT)
-		c.text = "x"
-		parent.call_deferred("add_child", c)		
-		c.call_deferred("connect", "pressed", parent, "emit_signal", ["doRemove"])
+	if canClose && !closeButton:
+		closeButton = Button.new()			
+		closeButton.text = "X"		
+		closeButton.rect_scale = Vector2(0.75, 0.65)	
+		closeButton.visible = false		
+		parent.call_deferred("add_child", closeButton)		
+		closeButton.set_anchors_and_margins_preset(Control.PRESET_TOP_RIGHT)
+		closeButton.margin_top = 2
+		closeButton.margin_left -= 3
+		closeButton.margin_right -= 3
+		closeButton.margin_bottom = -2
+		closeButton.call_deferred("connect", "pressed", parent, "emit_signal", ["doRemove"])
 		#connect("pressed", self, "doRemove")
 
 func doRemove():	
 	parent.get_parent().call_deferred("remove_child", parent)	
 	
-	
+func showCloseButton():	
+	if Rect2(moveHandle.rect_global_position, moveHandle.rect_size).has_point(get_global_mouse_position()):
+		closeButton.visible = true		
+	else:
+		closeButton.visible = false
 
-func click(event:InputEvent):
+func click(event:InputEvent):	
 	if event as InputEventMouseButton:				
 		if event.button_index == 1 and !event.is_pressed():
 			if moving:
@@ -108,7 +127,8 @@ func _input(event):
 				
 			if canResizeY:
 				parent.rect_size.y = max(parent.rect_size.y+event.relative.y, minHeight) 
-			grow_parent_as_needed()			
+			grow_parent_as_needed()		
+			validate_size()	
 		elif moving:
 			if canMoveX:
 				parent.rect_position.x += event.relative.x				
@@ -122,7 +142,7 @@ func _input(event):
 			
 			
 func grow_parent_as_needed():
-	if !parent.get_parent().has_node("draggable"):			
+	if !parent.get_parent().has_node("Draggable"):			
 		return
 	var par:Control = parent.get_parent()
 	var parRect = Rect2(par.rect_global_position, par.rect_size)
@@ -135,14 +155,36 @@ func grow_parent_as_needed():
 		var deltaY = par.rect_global_position.y - newRect.position.y		
 		if deltaY > 0 or deltaX > 0:
 			for c in par.get_children():			
-				if c.has_node("draggable"):											
+				if c.has_node("Draggable"):											
 					c.rect_global_position.x += (deltaX ) 
 					c.rect_global_position.y += (deltaY )					
 		par.rect_global_position = newRect.position
 		par.rect_size = newRect.size	
 		
+func validate_size():
+	print(parent.rect_size.x, " vs ", minWidth )
+	print(parent.rect_size.y, "vs",  minHeight )
+	if parent.rect_size.x < minWidth or parent.rect_size.y < minHeight:
+		becomeSmall()
+	else:
+		becomeBig()
 		
-		
+func becomeSmall():
+	if !small:
+		for c in parent.get_children():
+			if c as Control:
+				c.visible = false
+		moveHandle.visible = true
+		small = true
+
+func becomeBig():
+	if small:
+		for c in parent.get_children():
+			if c as Control:
+				c.visible = true		
+		small = false
+			
+	
 		
 		
 	

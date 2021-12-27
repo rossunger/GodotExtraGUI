@@ -1,5 +1,5 @@
 extends Node
-class_name saveable, "save_icon.png"
+class_name Saveable, "save_icon.png"
 
 var parent
 func _ready():

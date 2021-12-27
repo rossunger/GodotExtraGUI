@@ -1,16 +1,17 @@
 extends Control
-class_name child_adder, "add_icon.png"
+class_name ChildAdder, "add_icon.png"
 
 export(String, FILE, "*.tscn") var who
 		
 var parent
 
-func _ready():
+func _ready():	
+	who = load(who)	
 	parent = get_parent()
 	parent.connect("gui_input", self, "gui_input")
 	parent.add_user_signal("created")
 	parent.add_user_signal("removing")
-	who = load(who)	
+	
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	rect_size = Vector2(0,0)
 	

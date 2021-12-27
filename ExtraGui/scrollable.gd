@@ -1,5 +1,5 @@
 extends Control
-class_name scrollable, "move_icon.png"
+class_name Scrollable, "move_icon.png"
 
 export var canScrollX = true
 export var canScrollY = true
@@ -25,7 +25,7 @@ func doScroll(delta):
 	x += delta.x
 	y += delta.y
 	for c in parent.get_children():
-		if onlyDraggables && !c.has_node("draggable"):
+		if onlyDraggables && !c.has_node("Draggable"):
 			continue
 		if c is Control:
 			c.rect_position += delta
@@ -35,14 +35,14 @@ func doScroll(delta):
 #This allows you to zoom without affecting the size of labels, etc. 
 func doZoom(par, delta):	
 	for c in par.get_children():		
-		if c is Control && c.visible && c.has_node("draggable"):			
+		if c is Control && c.visible && c.has_node("Draggable"):			
 			if canZoomX:
 				c.rect_size.x *= delta 
-				c.rect_position.x *=delta
+				c.rect_position.x *=delta				
 			if canZoomY:
 				c.rect_size.y *= delta 
-				c.rect_position.y *=delta
-										
+				c.rect_position.y *=delta				
+																	
 			#recursive zoom all the children
 			doZoom(c, delta)			
 	
@@ -56,7 +56,7 @@ func _input(event):
 		var bottomright
 		#Step 1: get the biggest bounding box of all this "scrollables" children combined
 		for c in parent.get_children():
-			if c.has_node("draggable"):
+			if c.has_node("Draggable"):
 				if !topleft:
 					topleft = c.rect_global_position
 				if !bottomright:
