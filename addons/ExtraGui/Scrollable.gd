@@ -87,6 +87,7 @@ func _input(event):
 			if event.button_index == BUTTON_WHEEL_DOWN && canScrollY:
 				doScroll(Vector2(0,0-scroll_speed))	
 
+#Gets the biggeset bounding box of all the parent's children
 func getBounds() -> Rect2:
 	var topleft
 	var bottomright
