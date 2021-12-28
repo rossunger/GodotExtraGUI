@@ -83,3 +83,11 @@ func addUndo(time):
 	if undoTimes == [] or abs(undoTimes.back() - time) > 1:
 		redoTimes.clear()
 		undoTimes.push_back(time)
+		
+#Merge dictionary, B overwrtes A if same
+func merge(a:Dictionary, b:Dictionary) -> Dictionary:
+	var result = a.duplicate(true)
+	for k in b.keys():
+		result[k] = b[k]
+	return result
+		

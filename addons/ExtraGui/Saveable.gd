@@ -25,7 +25,7 @@ func getDataToSave() -> Dictionary:
 	r.scene = parent.filename
 	for c in get_children():
 		if c.has_method("getDataToSave"):
-			g.merge(r, c.getDataToSave())
+			egs.merge(r, c.getDataToSave())
 	return r
 
 

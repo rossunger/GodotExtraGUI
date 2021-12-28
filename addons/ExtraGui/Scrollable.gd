@@ -9,6 +9,7 @@ export var canZoomX = true
 export var canZoomY = true
 export var onlyDraggables = true 
 
+var bounds: Rect2
 var x = 0
 var y = 0
 var w = 1
@@ -54,26 +55,16 @@ func _input(event):
 		
 	#Frame all draggables so you can see them (i.e. zoom out/in and scroll as needed so that the bounding box of all the draggales combines is equal to the screen size)
 	if Input.is_key_pressed(KEY_F) && Input.is_key_pressed(KEY_ALT):
-		var topleft
-		var bottomright
+		
 		#Step 1: get the biggest bounding box of all this "scrollables" children combined
-		for c in parent.get_children():
-			if c.has_node("Draggable"):
-				if !topleft:
-					topleft = c.rect_global_position
-				if !bottomright:
-					bottomright = c.rect_global_position + c.rect_size
-				topleft.x = min(topleft.x, c.rect_global_position.x)
-				topleft.y = min(topleft.y, c.rect_global_position.y)				
-				bottomright.x = max(bottomright.x, c.rect_global_position.x + c.rect_size.x )
-				bottomright.y = max(bottomright.y, c.rect_global_position.y + c.rect_size.y )			
+		bounds = getBounds()
 		
 		#Step 2: calculate how much we need to zoom
-		var delta = bottomright-topleft			
+		var delta = bounds.size		
 		var d = min(parent.rect_size.x/delta.x, parent.rect_size.y/ delta.y)
 		
 		#Step 3: Zoom and Pan
-		doScroll(-topleft + Vector2(1,1))		
+		doScroll(-bounds.position + Vector2(1,1))		
 		doZoom(parent, d)		
 		
 	#mousehweel = scroll
@@ -96,4 +87,18 @@ func _input(event):
 			if event.button_index == BUTTON_WHEEL_DOWN && canScrollY:
 				doScroll(Vector2(0,0-scroll_speed))	
 
+func getBounds() -> Rect2:
+	var topleft
+	var bottomright
+	for c in parent.get_children():
+		if c.has_node("Draggable"):
+			if !topleft:
+				topleft = c.rect_global_position
+			if !bottomright:
+				bottomright = c.rect_global_position + c.rect_size
+			topleft.x = min(topleft.x, c.rect_global_position.x)
+			topleft.y = min(topleft.y, c.rect_global_position.y)				
+			bottomright.x = max(bottomright.x, c.rect_global_position.x + c.rect_size.x )
+			bottomright.y = max(bottomright.y, c.rect_global_position.y + c.rect_size.y )			
+	return Rect2(topleft, bottomright-topleft)
 		
