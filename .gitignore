@@ -4,3 +4,5 @@ export.cfg
 export_presets.cfg
 debug.log
 **/*.import
+project.godot
+logs/
