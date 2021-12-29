@@ -19,12 +19,15 @@ export var zoom_speed = 0.1
 
 var parent #the actual Control that will be scrolled 
 
+signal scroll
+signal zoom
+
 func _ready():	
 	parent = get_parent()			
 	if !parent as Control:
-		queue_free()
+		queue_free()	
 	
-func doScroll(delta):
+func doScroll(delta):	
 	x += delta.x
 	y += delta.y
 	for c in parent.get_children():
@@ -32,11 +35,14 @@ func doScroll(delta):
 			continue
 		if c is Control:
 			c.rect_position += delta
+	emit_signal("scroll", delta)
 
 
 #Recursively zoom the children, but only if they have a "draggable" node
 #This allows you to zoom without affecting the size of labels, etc. 
 func doZoom(par, delta):	
+	w *= delta
+	h *= delta
 	for c in par.get_children():		
 		if c is Control && c.visible && c.has_node("Draggable"):			
 			if canZoomX:
@@ -48,6 +54,7 @@ func doZoom(par, delta):
 																	
 			#recursive zoom all the children
 			doZoom(c, delta)			
+	emit_signal("zoom", delta)	
 	
 func _input(event):		
 	if !is_visible_in_tree():
@@ -101,5 +108,9 @@ func getBounds() -> Rect2:
 			topleft.y = min(topleft.y, c.rect_global_position.y)				
 			bottomright.x = max(bottomright.x, c.rect_global_position.x + c.rect_size.x )
 			bottomright.y = max(bottomright.y, c.rect_global_position.y + c.rect_size.y )			
+	if !topleft:
+		topleft=  Vector2(0,0)
+	if !bottomright:
+		bottomright = OS.window_size
 	return Rect2(topleft, bottomright-topleft)
 		
