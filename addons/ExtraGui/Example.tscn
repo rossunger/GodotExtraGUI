@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/ExtraGui/SelectionController.gd" type="Script" id=1]
 [ext_resource path="res://addons/ExtraGui/ToggleVisible.gd" type="Script" id=2]
+[ext_resource path="res://addons/ExtraGui/ScrollableGrid.gd" type="Script" id=3]
 [ext_resource path="res://addons/ExtraGui/Scrollable.gd" type="Script" id=4]
 [ext_resource path="res://addons/ExtraGui/ExtraGui1.theme" type="Theme" id=5]
 [ext_resource path="res://addons/ExtraGui/TabController.gd" type="Script" id=7]
@@ -51,6 +52,11 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ScrollableGrid" type="Control" parent="Tab1/Scrollable"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 3 )
 
 [node name="ChildAdder" type="Control" parent="Tab1"]
 margin_right = 40.0
