@@ -31,21 +31,21 @@ func doScroll(delta):
 		if onlyDraggables && !c.has_node("Draggable"):
 			continue
 		if c is Control:
-			c.doScroll(delta)
+			c.rect_position += delta
 
 
 #Recursively zoom the children, but only if they have a "draggable" node
 #This allows you to zoom without affecting the size of labels, etc. 
 func doZoom(par, delta):	
 	for c in par.get_children():		
-		if c is Control && c.visible && c.has_node("Draggable"):
-			var zoomVector = Vector2(1,1)				
+		if c is Control && c.visible && c.has_node("Draggable"):			
 			if canZoomX:
-				zoomVector.x = delta
+				c.rect_size.x *= delta 
+				c.rect_position.x *=delta				
 			if canZoomY:
-				zoomVector.y = delta
-			c.doZoom( zoomVector )
-																				
+				c.rect_size.y *= delta 
+				c.rect_position.y *=delta				
+																	
 			#recursive zoom all the children
 			doZoom(c, delta)			
 	
