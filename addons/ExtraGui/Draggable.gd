@@ -196,8 +196,13 @@ func becomeBig():
 			if c as Control:
 				c.visible = true		
 		small = false
-			
+
+func doScroll(delta):
+	rect_position += delta
 	
+func doZoom(delta:Vector2):	
+	rect_size *= delta 
+	rect_position *= delta		
 		
 		
 	
