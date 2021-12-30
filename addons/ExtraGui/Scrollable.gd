@@ -2,6 +2,8 @@ extends Control
 class_name Scrollable, "move_icon.png"
 
 # This component makes the parent a scrollbox, allowing you to scroll it's children, and zoom in and out
+signal scroll #for notifying children, suc as a Grid Component
+signal zoom #for notifying children, suc as a Grid Component
 
 export var canScrollX = true
 export var canScrollY = true
@@ -14,8 +16,8 @@ var x = 0
 var y = 0
 var w = 1
 var h = 1
-export var scroll_speed = 20
-export var zoom_speed = 0.1
+export var scroll_speed = 4
+export var zoom_speed = 0.01
 
 var parent #the actual Control that will be scrolled 
 
@@ -27,27 +29,35 @@ func _ready():
 func doScroll(delta):
 	x += delta.x
 	y += delta.y
+	emit_signal("scroll", delta)
 	for c in parent.get_children():
-		if onlyDraggables && !c.has_node("Draggable"):
+		if onlyDraggables && !c.has_node("Draggable"):			
 			continue
-		if c is Control:
-			c.rect_position += delta
-
-
+		if c.has_node("Draggable"):
+			c.get_node("Draggable").doScroll(delta)
+		else:
+			rect_position += delta  #default behavior... feel free to override this by giving the object a doScroll method
+		
 #Recursively zoom the children, but only if they have a "draggable" node
 #This allows you to zoom without affecting the size of labels, etc. 
 func doZoom(par, delta):	
+	var zoomVector = Vector2(1,1)				
+	if canZoomX:
+		zoomVector.x = delta
+	if canZoomY:
+		zoomVector.y = delta
+	emit_signal("zoom", zoomVector)
 	for c in par.get_children():		
-		if c is Control && c.visible && c.has_node("Draggable"):			
-			if canZoomX:
-				c.rect_size.x *= delta 
-				c.rect_position.x *=delta				
-			if canZoomY:
-				c.rect_size.y *= delta 
-				c.rect_position.y *=delta				
-																	
-			#recursive zoom all the children
-			doZoom(c, delta)			
+		if onlyDraggables && !c.has_node("Draggable"):			
+			continue
+		if c.has_node("Draggable"):			
+			c.get_node("Draggable").doZoom( zoomVector )
+			doZoom(c, delta)	#recursive zoom all the children
+		else:
+			#how shall we zoom everyone else?
+			pass				
+			
+		
 	
 func _input(event):		
 	if !is_visible_in_tree():

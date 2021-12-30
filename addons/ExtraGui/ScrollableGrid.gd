@@ -7,19 +7,31 @@ var scroll = Vector2(0,0)
 export var color = Color(0,0,0,0.2)
 var parent
 func _ready():
-	parent = get_parent()
-	
+	parent = get_parent()	
+	parent.connect("zoom", self, "zoom")
+	parent.connect("scroll", self, "scroll")
 	rect_size = Vector2(0,0)
-	pass # Replace with function body.
+	
 	
 func _draw():
 	var window_size = OS.window_size
 	
-	for x in window_size.x / zoom.x:		
-		var offset = fmod(scroll.x,zoom.x) + ( x * cell_size / zoom.x )
-		draw_line( Vector2( offset , 0),  Vector2(offset, window_size.y), color, 1)
+	for x in window_size.x / cell_size * zoom.x:		
+		var offset = fmod(scroll.x + window_size.x, cell_size) + ( x * cell_size  )
+		draw_line( Vector2( offset * zoom.x, 0),  Vector2(offset  * zoom.x, window_size.y), color, 1)
 	
-	for y in window_size.y / zoom.y:
-		var offset = fmod(scroll.y, zoom.y) + ( y * cell_size / zoom.y )
-		draw_line( Vector2( 0, offset),  Vector2(window_size.x, offset), color, 1)
+	for y in window_size.y /  cell_size * zoom.y:
+		var offset = fmod(scroll.y + window_size.y, cell_size) + ( y * cell_size  )
+		draw_line( Vector2( 0, offset * zoom.y),  Vector2(window_size.x, offset * zoom.y), color, 1)
 		
+func zoom(delta):
+	if delta.x == 0:
+		print("delta: 0")
+	print("zooming scrollable: ", zoom.x)
+	zoom *= delta 
+	scroll *= delta 
+	update()
+	
+func scroll(delta):
+	scroll += delta / zoom
+	update()
