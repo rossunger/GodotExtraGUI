@@ -16,8 +16,8 @@ var x = 0
 var y = 0
 var w = 1
 var h = 1
-export var scroll_speed = 4
-export var zoom_speed = 0.01
+export var scroll_speed = 10
+export var zoom_speed = 0.1
 
 var parent #the actual Control that will be scrolled 
 
@@ -79,15 +79,17 @@ func _input(event):
 		
 	#mousehweel = scroll
 	#Control + mousewheel = zoom		
-	if event is InputEventMouseButton:		
-		if Input.is_key_pressed(KEY_CONTROL):
-			if event.button_index == BUTTON_WHEEL_UP && canZoomX:							
-				doZoom(parent, 1 + zoom_speed)				
-				doScroll( ( -event.position) / scroll_speed )
-			if event.button_index == BUTTON_WHEEL_DOWN && canZoomX:				
-				doZoom(parent, 1 - zoom_speed)
-				doScroll( ( event.position) / scroll_speed )
-		else:
+	if event is InputEventMouseMotion:
+		return
+			
+	if (event.is_action_pressed("ZoomIn") || event.is_action_pressed("ZoomOut")) && (canZoomX || canZoomY):									
+		var direction = 1
+		if event.is_action_pressed("ZoomOut"):
+			direction = -1
+		doZoom(parent, 1 + (zoom_speed * direction))
+		doScroll( (get_viewport().get_mouse_position() * -direction) / scroll_speed )			
+	elif event is InputEventMouseButton:		
+		
 			if event.button_index == BUTTON_WHEEL_RIGHT && canScrollX:
 				doScroll(Vector2(0-scroll_speed,0))			
 			if event.button_index == BUTTON_WHEEL_LEFT && canScrollX:

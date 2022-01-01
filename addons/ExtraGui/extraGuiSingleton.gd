@@ -64,6 +64,28 @@ func _ready():
 		event.scancode = OS.find_scancode_from_string("enter")
 		InputMap.action_add_event("Fullscreen", event )
 
+	if !InputMap.has_action("ZoomIn"):
+		InputMap.add_action("ZoomIn")
+		var event = InputEventKey.new()
+		#event.control = true
+		event.scancode = OS.find_scancode_from_string("equal")
+		InputMap.action_add_event("ZoomIn", event )
+		
+		var event2 = InputEventMouseButton.new()
+		event2.button_index == BUTTON_WHEEL_UP
+		InputMap.action_add_event("ZoomIn", event2 )
+		
+	if !InputMap.has_action("ZoomOut"):
+		InputMap.add_action("ZoomOut")
+		var event = InputEventKey.new()
+		#event.control = true
+		event.scancode = OS.find_scancode_from_string("minus")
+		InputMap.action_add_event("ZoomOut", event )
+		
+		var event2 = InputEventMouseButton.new()
+		event2.button_index == BUTTON_WHEEL_DOWN
+		InputMap.action_add_event("ZoomOut", event2 )
+
 func _input(event):	
 	if event.is_action_pressed("Redo"):
 		if redoTimes.size() > 0:
