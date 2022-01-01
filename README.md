@@ -1,5 +1,7 @@
 # GodotExtraGUI
 
+ExtraGui is an addon for Godot engine. It has modular components that add functionality to existing Gui (aka Control) components.
+
 # Video demo
 https://www.youtube.com/watch?v=Lm_o7H0sF00
 
