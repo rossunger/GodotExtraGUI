@@ -124,7 +124,7 @@ static func SortByHeirarchy(a, b):
 	var bpath = b.get_path() as String
 	if apath.find(bpath) != -1:	 
 		return false
-	return false
+	return true
 
 func doSave(filepath:String = autosaveFilePath):
 	if !filepath.ends_with(".json"):		

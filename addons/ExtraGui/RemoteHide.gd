@@ -1,5 +1,5 @@
 extends Control
-class_name RemotHide, "eye_icon.png"
+class_name RemoteHide, "eye_icon.png"
 
 export (NodePath) var who
 func _ready():
