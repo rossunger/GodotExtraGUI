@@ -40,5 +40,6 @@ Please see the the example.tscn scene in the ExtraGui folder.
 
 **Undoable**    add this as a sibling to any draggables which you would like to work with the undo system. Works with moving, resizing, renaming, creating/deleting, 
 
+**EnumDropdown** a dropdown box (aka OptionButton) that is filled from an Enum. Set Enum_owner to the name of the autoload singleton script where the Enum is defined
 
 NOTE: Do note rename the nodes "Draggable, Scrollable, Renameable, Selectable, ChildAdder, Saveable, Undoable
