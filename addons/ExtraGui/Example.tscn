@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/ExtraGui/SelectionController.gd" type="Script" id=1]
 [ext_resource path="res://addons/ExtraGui/ToggleVisible.gd" type="Script" id=2]
+[ext_resource path="res://addons/ExtraGui/EnumDropdown.gd" type="Script" id=3]
 [ext_resource path="res://addons/ExtraGui/Scrollable.gd" type="Script" id=4]
 [ext_resource path="res://addons/ExtraGui/ExtraGui1.theme" type="Theme" id=5]
 [ext_resource path="res://addons/ExtraGui/TabController.gd" type="Script" id=7]
@@ -70,7 +71,6 @@ __meta__ = {
 }
 
 [node name="Tab2" type="Panel" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -83,6 +83,20 @@ anchor_bottom = 1.0
 text = "I am tab 2"
 align = 1
 valign = 1
+
+[node name="EnumOptionButton" type="OptionButton" parent="Tab2"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -100.0
+margin_top = 34.0
+margin_right = 96.0
+margin_bottom = 66.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Tab3" type="Panel" parent="."]
 visible = false
@@ -105,6 +119,7 @@ __meta__ = {
 [node name="MenuPanel" type="Panel" parent="."]
 anchor_right = 1.0
 margin_bottom = 66.0
+mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -113,6 +128,7 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="MenuPanel"]
 anchor_right = 1.0
 margin_bottom = 66.0
+mouse_filter = 2
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false

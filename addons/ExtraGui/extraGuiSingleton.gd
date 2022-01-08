@@ -8,6 +8,10 @@ var saveController
 var undoTimes: Array
 var redoTimes: Array
 
+enum test_enum { 
+	Enum_Option_A, Enum_Option_B
+}
+
 func _ready():
 	if !InputMap.has_action("Undo"):
 		InputMap.add_action("Undo")
@@ -90,4 +94,5 @@ func merge(a:Dictionary, b:Dictionary) -> Dictionary:
 	for k in b.keys():
 		result[k] = b[k]
 	return result
-		
+	
+	
