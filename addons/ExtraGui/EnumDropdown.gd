@@ -1,5 +1,5 @@
 extends OptionButton
-class_name EnumOptionButton, "list_icon.png"
+class_name EnumDropdown, "list_icon.png"
 
 # This control lets you use an Enum to fill a drop-down box (aka option button)
 # Use the .selected property to get the enum value that was chosen
