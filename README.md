@@ -1,4 +1,5 @@
 # GodotExtraGUI
+Extra GUI controls for use with the Godot Engine. (https://godotengine.org/)
 
 # Video demo
 https://www.youtube.com/watch?v=Lm_o7H0sF00
@@ -41,5 +42,9 @@ Please see the the example.tscn scene in the ExtraGui folder.
 **Undoable**    add this as a sibling to any draggables which you would like to work with the undo system. Works with moving, resizing, renaming, creating/deleting, 
 
 **EnumDropdown** a dropdown box (aka OptionButton) that is filled from an Enum. Set Enum_owner to the name of the autoload singleton script where the Enum is defined
+
+**SpashAndFade** is a control that fades out
+
+**OpacityButton** is a semi-transparent button that becomes more opaque when you hover over it 
 
 NOTE: Do note rename the nodes "Draggable, Scrollable, Renameable, Selectable, ChildAdder, Saveable, Undoable
