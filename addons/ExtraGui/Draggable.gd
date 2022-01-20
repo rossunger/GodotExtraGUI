@@ -28,18 +28,19 @@ var small = false
 
 func _ready():			
 	parent = get_parent()
-	
-	resizeHandle = get_node(resizeHandle)	
-	if resizeHandle:
-		resizeHandle.connect("gui_input", self, "resize")	
-			
-	moveHandle = get_node(moveHandle)	
-	moveHandle.mouse_filter = MOUSE_FILTER_STOP
-	moveHandle.connect("gui_input", self, "click")		
 
-	#Show [X] (close button) only when the mouse is over the move handle
-	moveHandle.connect("mouse_entered", self, "showCloseButton")
-	moveHandle.connect("mouse_exited", self, "showCloseButton")
+	if has_node(resizeHandle):
+		resizeHandle = get_node(resizeHandle)	
+		resizeHandle.connect("gui_input", self, "resize")	
+	
+	if has_node(moveHandle):
+		moveHandle = get_node(moveHandle)	
+		moveHandle.mouse_filter = MOUSE_FILTER_STOP
+		moveHandle.connect("gui_input", self, "click")		
+
+		#Show [X] (close button) only when the mouse is over the move handle
+		moveHandle.connect("mouse_entered", self, "showCloseButton")
+		moveHandle.connect("mouse_exited", self, "showCloseButton")
 				
 	add_to_group("draggable")	
 	
