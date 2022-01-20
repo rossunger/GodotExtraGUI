@@ -32,15 +32,13 @@ func _ready():
 	if has_node(resizeHandle):
 		resizeHandle = get_node(resizeHandle)	
 		resizeHandle.connect("gui_input", self, "resize")	
-	
+		
+		
 	if has_node(moveHandle):
 		moveHandle = get_node(moveHandle)	
 		moveHandle.mouse_filter = MOUSE_FILTER_STOP
 		moveHandle.connect("gui_input", self, "click")		
-
-		#Show [X] (close button) only when the mouse is over the move handle
-		moveHandle.connect("mouse_entered", self, "showCloseButton")
-		moveHandle.connect("mouse_exited", self, "showCloseButton")
+		
 				
 	add_to_group("draggable")	
 	
@@ -67,6 +65,9 @@ func _ready():
 		closeButton.margin_bottom = -2
 		closeButton.call_deferred("connect", "pressed", parent, "emit_signal", ["doRemove"])
 		#connect("pressed", self, "doRemove")
+		#Show [X] (close button) only when the mouse is over the move handle
+		moveHandle.connect("mouse_entered", self, "showCloseButton")
+		moveHandle.connect("mouse_exited", self, "showCloseButton")
 
 #called automatically via signals / groups
 func doRemove():	
