@@ -1,86 +1,62 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://tueg33wm62ym"]
 
-[ext_resource path="res://addons/ExtraGui/Selectable.gd" type="Script" id=1]
-[ext_resource path="res://addons/ExtraGui/Saveable.gd" type="Script" id=2]
-[ext_resource path="res://addons/ExtraGui/Undoable.gd" type="Script" id=3]
-[ext_resource path="res://addons/ExtraGui/ChildAdder.gd" type="Script" id=4]
-[ext_resource path="res://addons/ExtraGui/Draggable.gd" type="Script" id=5]
-[ext_resource path="res://addons/ExtraGui/Renameable.gd" type="Script" id=6]
-
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.258824, 0.223529, 0.223529, 1 )
+[ext_resource type="Script" path="res://addons/ExtraGui/Selectable.gd" id="1"]
+[ext_resource type="Script" path="res://addons/ExtraGui/Saveable.gd" id="2"]
+[ext_resource type="Script" path="res://addons/ExtraGui/Undoable.gd" id="3"]
+[ext_resource type="Script" path="res://addons/ExtraGui/ChildAdder.gd" id="4"]
+[ext_resource type="Script" path="res://addons/ExtraGui/Draggable.gd" id="5"]
+[ext_resource type="Script" path="res://addons/ExtraGui/Renameable.gd" id="6"]
 
 [node name="Panel" type="Panel"]
-margin_left = 85.0
-margin_top = 97.0
-margin_right = 213.0
-margin_bottom = 232.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+clip_contents = true
+custom_minimum_size = Vector2(150, 100)
+offset_right = 150.0
+offset_bottom = 100.0
+size_flags_horizontal = 3
 
 [node name="Draggable" type="Control" parent="."]
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+anchors_preset = 0
+script = ExtResource("5")
 resizeHandle = NodePath("../resizeHandle")
 moveHandle = NodePath("../moveHandle2")
 
 [node name="resizeHandle" type="Panel" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -22.0
-margin_top = -23.0
-margin_right = -2.0
-margin_bottom = -5.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = -30.0
+offset_top = -30.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="moveHandle2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
-margin_bottom = 18.0
 mouse_filter = 0
-custom_styles/normal = SubResource( 2 )
 text = "NAME 1"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Selectable" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+anchors_preset = 0
+script = ExtResource("1")
 
 [node name="Renameable" type="Node" parent="."]
-script = ExtResource( 6 )
+script = ExtResource("6")
 who = NodePath("../moveHandle2")
 
 [node name="ChildAdder" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+anchors_preset = 0
+script = ExtResource("4")
 who = "res://addons/ExtraGui/exampleRecursiveChildToBeAdded.tscn"
 
 [node name="Saveable" type="Node" parent="."]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="Undoable" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+anchors_preset = 0
 mouse_filter = 2
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("3")

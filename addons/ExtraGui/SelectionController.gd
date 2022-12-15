@@ -1,5 +1,5 @@
-extends Node
-class_name SelectionController, "select_icon.png"
+class_name SelectionController extends Node
+@icon("select_icon.png")
 
 # SelectionController singleton. instance a selectBox when you click and drag
 
@@ -8,16 +8,16 @@ signal moving
 
 var parent
 var selectBox
-export var color = Color.cornflower
+@export var color = Color.CORNFLOWER_BLUE
 var interrupted = false
-onready var timer = Timer.new() #used for interrupting the select box
+@onready var timer = Timer.new() #used for interrupting the select box
 var startPosition
 
 func _ready():
 	parent = get_parent()
 	add_to_group("draggable")
 	add_child(timer)
-	timer.connect("timeout", self, "startSelection")	
+	timer.connect("timeout", startSelection)	
 	#register ourselves as the only selection controller singleton in the EGS (extra gui singleton)
 	if !egs.selectionController:
 		egs.selectionController = self

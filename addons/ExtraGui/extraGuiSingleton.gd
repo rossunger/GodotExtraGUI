@@ -13,59 +13,66 @@ enum test_enum {
 }
 
 func _ready():
+	if !InputMap.has_action("Play"):
+		InputMap.add_action("Play")
+		var event = InputEventKey.new()				
+		event.keycode = OS.find_keycode_from_string("space")
+		InputMap.action_add_event("Play", event )
+	
 	if !InputMap.has_action("Undo"):
 		InputMap.add_action("Undo")
 		var event = InputEventKey.new()
-		event.control = true		
-		event.scancode = OS.find_scancode_from_string("z")
+		event.ctrl_pressed = true				
+		event.keycode = OS.find_keycode_from_string("z")
 		InputMap.action_add_event("Undo", event )
+	
 		
 	if !InputMap.has_action("Redo"):
 		InputMap.add_action("Redo")
 		var event = InputEventKey.new()
-		event.control = true
-		event.shift = true
-		event.scancode = OS.find_scancode_from_string("z")
+		event.ctrl_pressed = true
+		event.shift_pressed = true
+		event.keycode = OS.find_keycode_from_string("z")
 		InputMap.action_add_event("Redo", event )
 		
 	if !InputMap.has_action("Save"):
 		InputMap.add_action("Save")
 		var event = InputEventKey.new()
-		event.control = true		
-		event.scancode = OS.find_scancode_from_string("s")
+		event.ctrl_pressed = true		
+		event.keycode = OS.find_keycode_from_string("s")
 		InputMap.action_add_event("Save", event )
 		
 	
 	if !InputMap.has_action("SaveAs"):
 		InputMap.add_action("SaveAs")
 		var event = InputEventKey.new()
-		event.control = true
-		event.shift = true
-		event.scancode = OS.find_scancode_from_string("s")
+		event.ctrl_pressed = true
+		event.shift_pressed = true
+		event.keycode = OS.find_keycode_from_string("s")
 		InputMap.action_add_event("SaveAs", event )
 		
 	
 	if !InputMap.has_action("Load"):
 		InputMap.add_action("Load")
 		var event = InputEventKey.new()
-		event.control = true		
-		event.scancode = OS.find_scancode_from_string("o")
+		event.ctrl_pressed = true		
+		event.keycode = OS.find_keycode_from_string("o")
 		InputMap.action_add_event("Load", event )
 		
 	
 	if !InputMap.has_action("LoadFrom"):
 		InputMap.add_action("LoadFrom")
 		var event = InputEventKey.new()
-		event.control = true
-		event.shift = true
-		event.scancode = OS.find_scancode_from_string("o")
+		event.ctrl_pressed = true
+		event.shift_pressed = true
+		event.keycode = OS.find_keycode_from_string("o")
 		InputMap.action_add_event("LoadFrom", event )
 		
 	if !InputMap.has_action("Fullscreen"):
 		InputMap.add_action("Fullscreen")
 		var event = InputEventKey.new()
-		event.alt = true
-		event.scancode = OS.find_scancode_from_string("enter")
+		event.alt_pressed = true
+		event.keycode = OS.find_keycode_from_string("enter")
 		InputMap.action_add_event("Fullscreen", event )
 
 func _input(event):	
@@ -81,8 +88,12 @@ func _input(event):
 			get_tree().call_group("undoable", "doUndo", u)
 			redoTimes.push_back(u)
 	if event.is_action_pressed("Fullscreen"):
-		OS.window_fullscreen = !OS.window_fullscreen
-		
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)		
+	if not Input.is_mouse_button_pressed(1) && not Input.is_mouse_button_pressed(2):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 func addUndo(time):		
 	if undoTimes == [] or abs(undoTimes.back() - time) > 1:
 		redoTimes.clear()

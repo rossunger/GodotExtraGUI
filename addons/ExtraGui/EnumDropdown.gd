@@ -1,11 +1,12 @@
-extends OptionButton
-class_name EnumDropdown, "list_icon.png"
+
+class_name EnumDropdown extends OptionButton
+@icon("list_icon.png")
 
 # This control lets you use an Enum to fill a drop-down box (aka option button)
 # Use the .selected property to get the enum value that was chosen
 
-export var enum_name = "test_enum"
-export var singleton_name = "egs"
+@export var enum_name = "test_enum"
+@export var singleton_name = "egs"
 
 func _enter_tree():
 	if enum_name:	

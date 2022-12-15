@@ -1,12 +1,13 @@
-extends Control
-class_name TabController, "tab_icon.png"
+
+class_name TabController extends Control
+@icon("tab_icon.png")
 
 #This class manages a set of of TabgroupButtons, which are it's siblings in the tree
 
 var parent #the parent of this controller and all the tabgroupButtons
 var tabs: Dictionary = {}
-export var tabGroup = "tabgroup1" 
-export (NodePath) var tabParent #the parent of the actual tab
+@export var tabGroup = "tabgroup1" 
+@export_node_path(Node) var tabParent #the parent of the actual tab
 
 func _ready():
 	parent = get_parent()		

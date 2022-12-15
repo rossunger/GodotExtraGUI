@@ -1,0 +1,4 @@
+res://addons/ExtraGui/Example.tscn
+res://addons/ExtraGui/exampleRecursiveChildToBeAdded.tscn
+res://addons/ExtraGui/Renameable.gd
+res://addons/ExtraGui/Draggable.gd

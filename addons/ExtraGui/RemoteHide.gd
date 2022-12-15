@@ -1,11 +1,12 @@
-extends Control
-class_name RemoteHide, "eye_icon.png"
 
-export (NodePath) var who
+class_name RemoteHide extends Control
+@icon("eye_icon.png")
+
+@export_node_path(Node) var who
 func _ready():
 	who = get_node(who)
-	connect("visibility_changed", self, "visibilityChanged")
-	connect("tree_entered", self, "doShow")
+	connect("visibility_changed", visibilityChanged)
+	#connect("tree_entered", doShow)
 
 func visibilityChanged():
 	if who:

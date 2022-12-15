@@ -1,5 +1,6 @@
-extends Node
-class_name Saveable, "save_icon.png"
+
+class_name Saveable extends Node
+@icon("save_icon.png")
 
 #this control makes it's parent's data saveable. 
 #To save more data, add a child node that has 
@@ -19,8 +20,8 @@ func processLoadData(data:Dictionary):
 func getDataToSave() -> Dictionary:
 	var r: Dictionary = {}
 	r.name = parent.name
-	r.rect_position = parent.rect_position
-	r.rect_size = parent.rect_size
+	r.position = parent.position
+	r.size = parent.size
 	r.path_to_parent = parent.get_parent().get_path()
 	r.scene = parent.filename
 	for c in get_children():

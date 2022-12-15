@@ -1,12 +1,12 @@
-extends Control
-class_name Undoable, "undo_icon.png"
+class_name Undoable extends Control
+@icon("undo_icon.png")
 
-export var resize = true
-export var move = true
-export var rename = true
-export var create = true
-export var remove = true
-export var drop = true
+@export var resize = true
+@export var move = true
+@export var rename = true
+@export var create = true
+@export var remove = true
+@export var drop = true
 
 var parent
 var undoList:Array
@@ -23,15 +23,15 @@ func _ready():
 	
 func connect_signals():
 	if parent.has_node("Draggable") && (move or resize):
-		parent.connect("startMoveResize", self, "moved_or_resized")
+		parent.connect("startMoveResize", moved_or_resized)
 	if rename && parent.has_node("Renameable"):
-		parent.connect("doneRenaming", self, "doneRenaming")
+		parent.connect("doneRenaming", doneRenaming)
 	if parent.has_node("ChildAdder"):
-		parent.connect("created", self, "created")		
+		parent.connect("created", created)		
 	if parent.has_signal("doRemove"):
-		parent.connect("doRemove", self, "doRemove")
+		parent.connect("doRemove", doRemove)
 		
-	connect("tree_exited", self, "onExitingTree" )
+	connect("tree_exited", onExitingTree )
 
 func onExitingTree():	
 	# For the undo system, when you remove a node from the tree, it has to go somewhere, so we temporarily attach it to the ExtraGuiSingleton
@@ -43,16 +43,16 @@ func onExitingTree():
 		
 
 func doneRenaming(label, oldName):	
-	addUndo({"Type": "Rename", "Who": parent, "Label": label, "OldName": oldName, "time": OS.get_ticks_msec()})
+	addUndo({"Type": "Rename", "Who": parent, "Label": label, "OldName": oldName, "time": Time.get_ticks_msec()})
 
 func moved_or_resized(oldRect):		
-	addUndo({"Type": "MoveResize", "Who": parent,"OldRect": oldRect, "time": OS.get_ticks_msec()})	
+	addUndo({"Type": "MoveResize", "Who": parent,"OldRect": oldRect, "time": Time.get_ticks_msec()})	
 
 func created(child):	
-	addUndo({"Type": "Create", "Parent": parent,"Child": child, "time": OS.get_ticks_msec()})
+	addUndo({"Type": "Create", "Parent": parent,"Child": child, "time": Time.get_ticks_msec()})
 
 func doRemove():	
-	addUndo({"Type": "Remove", "Parent": parent.get_parent(),"Child": parent, "time": OS.get_ticks_msec ()})
+	addUndo({"Type": "Remove", "Parent": parent.get_parent(),"Child": parent, "time": Time.get_ticks_msec ()})
 
 func addUndo(what):
 	undoList.push_back(what)
@@ -63,13 +63,13 @@ func doUndo(time):
 	# Every undoable action is timestamped
 	if !is_visible_in_tree() or undoList.size() == 0 or abs(undoList.back().time - time) >16:
 		return
-		 
+		
 	var u = undoList.pop_back()
 
 	if u.Type == "MoveResize":
 		var newRect = u.Who.get_rect()			
-		u.Who.rect_position = u.OldRect.position
-		u.Who.rect_size = u.OldRect.size		
+		u.Who.position = u.OldRect.position
+		u.Who.size = u.OldRect.size		
 		u.OldRect = newRect
 		redoList.append(u)
 	elif u.Type == "Create":
@@ -93,13 +93,13 @@ func doUndo(time):
 func doRedo(time):	
 	if !is_visible_in_tree() or redoList.size() == 0 or abs(redoList.back().time - time) >16:
 		return
-		 
+		
 	var u = redoList.pop_back()	
 	
 	if u.Type == "MoveResize":
 		var newRect = u.Who.get_rect()			
-		u.Who.rect_position = u.OldRect.position
-		u.Who.rect_size = u.OldRect.size		
+		u.Who.position = u.OldRect.position
+		u.Who.size = u.OldRect.size		
 		u.OldRect = newRect
 		undoList.append(u)
 		
@@ -123,7 +123,7 @@ func doRedo(time):
 		pass
 
 func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:        
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:        
 		for c in undoList:
 			if c.has("Child") && is_instance_valid(c.Child):
 				get_tree().get_root().add_child(c.Child)

@@ -1,14 +1,13 @@
-extends Node
-class_name SaveController, "save_icon.png"
-
+class_name SaveController extends Node
+@icon("save_icon.png")
 # SaveController is a singleton that handles saving and loading
 
 var saveFilePath
-var saveFile = File.new()
+var saveFile
 var dialog: FileDialog
 var resultDialog: AcceptDialog
 var autosaveFilePath = "res://autosave.json"
-var autosaveFile = File.new()
+var autosaveFile
 var dialogCanvasLayer: CanvasLayer
 
 func _ready():
@@ -26,20 +25,20 @@ func _ready():
 	dialogCanvasLayer.layer =100
 	add_child(dialogCanvasLayer)	
 	dialogCanvasLayer.add_child(dialog)		
-	dialog.set_anchors_and_margins_preset(Control.PRESET_WIDE)
-	dialog.rect_size -=  Vector2(15,30)
+	#dialog.set_anchors_and_offsets_preset(Container.PRESET_FULL_RECT)
+	#dialog.size -=  Vector2i(15,30)
 	
-	dialog.popup_exclusive = true
+	#dialog.popup_exclusive = true
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.filters.push_back("*.json")	
 	
 	resultDialog = AcceptDialog.new()	
-	resultDialog.set_anchors_and_margins_preset(Control.PRESET_CENTER)
+	#resultDialog.set_anchors_and_offset_preset(Container.PRESET_CENTER)
 	dialogCanvasLayer.add_child(resultDialog)
 	
 		
 func _input(event):	
-	if !dialog.is_visible_in_tree():
+	if !dialog.is_inside_tree():
 		if event.is_action_pressed("SaveAs"):		
 			doSaveAs()					
 		elif event.is_action_pressed("Save"):
@@ -51,32 +50,32 @@ func _input(event):
 		
 	
 func doLoadFrom():
-	if resultDialog.is_connected("confirmed", self, "doLoadFrom"):
-		resultDialog.disconnect("confirmed", self, "doLoadFrom")
+	if resultDialog.is_connected("confirmed", doLoadFrom):
+		resultDialog.disconnect("confirmed", doLoadFrom)
 	
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.invalidate() #refresh the file system
 	dialog.popup()
-	if !dialog.is_connected("file_selected", self, "doLoad"):
-		dialog.connect("file_selected", self, "doLoad")
+	if !dialog.is_connected("file_selected", doLoad):
+		dialog.connect("file_selected", doLoad)
 	
 func doLoad(filepath:String = autosaveFilePath):	
 	if !filepath.ends_with(".json"):
 		resultDialog.dialog_text = "Please select a .json save file"
 		resultDialog.popup()
-		if !resultDialog.is_connected("confirmed", self, "doLoadFrom"):
-			resultDialog.connect("confirmed", self, "doLoadFrom")
+		if !resultDialog.is_connected("confirmed", doLoadFrom):
+			resultDialog.connect("confirmed", doLoadFrom)
 		dialog.popup()
-		if !dialog.is_connected("file_selected", self, "doLoad"):
-			dialog.connect("file_selected", self, "doLoad")
+		if !dialog.is_connected("file_selected", doLoad):
+			dialog.connect("file_selected", doLoad)
 	
 	for c in get_tree().get_nodes_in_group("saveable"):
 		c.parent.get_parent().remove_child(c.parent)
 		c.parent.queue_free()
 	
 	saveFilePath = filepath
-	saveFile.open(saveFilePath, File.READ)	
-	var data = JSON.parse(saveFile.get_as_text()).result			
+	saveFile = FileAccess.open(saveFilePath, FileAccess.READ)		
+	var data = JSON.parse_string(saveFile.get_as_text()).result			
 	var errors = false
 	for d in data:
 		if !is_instance_valid( get_node_or_null( d.path_to_parent )):			
@@ -94,8 +93,8 @@ func doLoad(filepath:String = autosaveFilePath):
 		var parent = get_node(d.path_to_parent)
 		child.name = d.name
 		parent.add_child(child)
-		child.rect_position = str2var("Vector2" + d.rect_position)
-		child.rect_size = str2var("Vector2" + d.rect_size)
+		child.position = str_to_var("Vector2" + d.position)
+		child.size = str_to_var("Vector2" + d.size)
 	
 		#If you have other data to load, this is where you should do that		
 		var saveable = child.get_node("Saveable")
@@ -107,17 +106,17 @@ func doLoad(filepath:String = autosaveFilePath):
 		resultDialog.popup()
 	autosaveFile.close() 	 
 	
-	if dialog.is_connected("file_selected", self, "doLoad"):
-		dialog.disconnect("file_selected", self, "doLoad")	
+	if dialog.is_connected("file_selected", doLoad):
+		dialog.disconnect("file_selected", doLoad)	
 
 func doSaveAs():
-	if resultDialog.is_connected("confirmed", self, "doSaveAs"):
-		resultDialog.disconnect("confirmed", self, "doSaveAs")
+	if resultDialog.is_connected("confirmed", doSaveAs):
+		resultDialog.disconnect("confirmed", doSaveAs)
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.invalidate()
 	dialog.popup()
-	if !dialog.is_connected("file_selected", self, "doSave"):
-		dialog.connect("file_selected", self, "doSave")
+	if !dialog.is_connected("file_selected", doSave):
+		dialog.connect("file_selected", doSave)
 
 static func SortByHeirarchy(a, b):
 	var apath = a.get_path() as String
@@ -131,26 +130,26 @@ func doSave(filepath:String = autosaveFilePath):
 		if filepath.ends_with("/") or filepath.ends_with("\\"):		
 			resultDialog.dialog_text = "Please choose a filename"
 			resultDialog.popup()
-			if dialog.is_connected("file_selected", self, "doSave"):
-				dialog.disconnect("file_selected", self, "doSave")
-			if !resultDialog.is_connected("confirmed", self, "doSaveAs"):
-				resultDialog.connect("confirmed", self, "doSaveAs")			
+			if dialog.is_connected("file_selected", doSave):
+				dialog.disconnect("file_selected", doSave)
+			if !resultDialog.is_connected("confirmed", doSaveAs):
+				resultDialog.connect("confirmed", doSaveAs)			
 			return
 		filepath += ".json"
 	saveFilePath = filepath		
 	
 	var saveData: Array
 	var sortedSaveables = get_tree().get_nodes_in_group("saveable")
-	sortedSaveables.sort_custom(self, "SortByHeirarchy")
+	sortedSaveables.sort_custom(SortByHeirarchy)
 	
 	for s in sortedSaveables:
 		saveData.push_back( s.getDataToSave() )			
 		
-	saveFile.open(saveFilePath, File.WRITE)
-	saveFile.store_string(JSON.print(saveData))
+	saveFile = FileAccess.open(saveFilePath, FileAccess.WRITE)
+	saveFile.store_string(JSON.stringify(saveData))
 	saveFile.close() 	 	
-	if dialog.is_connected("file_selected", self, "doSave"):
-		dialog.disconnect("file_selected", self, "doSave")	
+	if dialog.is_connected("file_selected",doSave):
+		dialog.disconnect("file_selected", doSave)	
 	
 
 

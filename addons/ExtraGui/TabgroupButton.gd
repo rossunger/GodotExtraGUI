@@ -1,16 +1,17 @@
-extends Button
-class_name TabgroupButton, "tab_icon.png"
+
+class_name TabgroupButton extends Button
+@icon("tab_icon.png")
 
 var tabGroup: String
 var tabController
-export (NodePath) var tab  #the control that you will be showing when this button is clicked
-export var closeable = true
-export var selected = false #only one tab should be selected at a time
+@export_node_path(Control) var tab  #the control that you will be showing when this button is clicked
+@export var closeable = true
+@export var selected = false #only one tab should be selected at a time
 var closeButton: Button
 	
 func _ready():	
 	tab = get_node(tab)			
-	connect("pressed", self, "_on_Button_pressed")	
+	connect("pressed", _on_Button_pressed)	
 	
 	#Init the tabggroup... hide the unselected ones
 	if selected:
@@ -27,11 +28,11 @@ func _ready():
 		closeButton.margin_right =0
 		closeButton.text = "x"
 		closeButton.visible = false		
-		connect("mouse_entered", self, "showCloseButton", [true])
-		closeButton.connect("mouse_entered", self, "showCloseButton", [true])
-		connect("mouse_exited", self, "showCloseButton", [false])
-		closeButton.connect("mouse_exited", self, "showCloseButton", [false])
-		closeButton.connect("pressed", tabController, "closeTab", [self])
+		connect("mouse_entered", showCloseButton.bind(true))
+		closeButton.connect("mouse_entered", showCloseButton.bind(true))
+		connect("mouse_exited", showCloseButton.bind(false))
+		closeButton.connect("mouse_exited", showCloseButton.bind(false))
+		closeButton.connect("pressed", tabController.closeTab.bind(self))
 		
 
 #this will be called automatically...do not call it yourself! instead use get_tree().call_group. See TabController.gd for example
